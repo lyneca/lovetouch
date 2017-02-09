@@ -11,6 +11,7 @@ function Well:new(x, y, r, b, cr, c)
 	o = {x=x,y=y,radius=r,band_gap=b,inner_radius=r-b,collection_radius=cr,color=c}
 	setmetatable(o, self)
 	self.__index = self
+	return o
 end
 
 function Well:update(dt)
@@ -32,7 +33,7 @@ function Well:distanceTo(p)
 end
 
 function Well:applyInner(p)
-
+	
 end
 
 function Well:applyBand(p)

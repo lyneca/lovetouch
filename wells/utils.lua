@@ -1,6 +1,10 @@
 function cos(x) return math.cos(x) end
 function sin(x) return math.sin(x) end
 function atan2(x, y) return math.atan2(x, y) end
+function rad(a) return math.rad(a) end
+function random(a, b)
+	return love.math.random(a, b)
+end
 
 function distance(a, b)
 	return math.sqrt(math.pow(b.x - a.x, 2) + math.pow(b.y - a.y, 2))

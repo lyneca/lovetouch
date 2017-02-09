@@ -2,17 +2,15 @@ Particle = {
 	x=0,
 	y=0,
 	angle=0,
-	velocity=0
+	velocity=0,
+	color={0,0,255}
 }
 
 function Particle:new(x, y)
 	o = {x=x,y=y}
 	setmetatable(o, self)
 	self.__index = self
-end
-
-function Particle:update(dt)
-
+	return o
 end
 
 function Particle:checkBounce()
@@ -30,6 +28,21 @@ function Particle:checkBounce()
 	end
 end
 
+function Particle:addVelocity(a, v)
+	c = polToCart(a, v)
+	self.vx = self.vx + c.x
+	self.vy = self.vy + c.y
+end
+
 function Particle:distanceTo(o)
 	return distance(self, o)	
+end
+
+function Particle:update(dt)
+
+end
+
+function Particle:draw()
+	love.graphics.setColor(HSL(unpack(self.color)))
+	love.graphics.circle('fill', self.x, self.y, 2)
 end
