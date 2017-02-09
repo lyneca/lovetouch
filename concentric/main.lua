@@ -4,7 +4,7 @@ dots = {}
 
 grid = {}
 
-FRICTION_FREE = 0.9
+FRICTION_FREE = 0.99
 FRICTION_HELD = 0.97
 MOVE_SPEED = 1
 RANDOM_MOVE_AMOUNT = 40
@@ -24,7 +24,7 @@ SPEED_LIMIT = 700
 
 GRID_GAP = 20
 
-love.window.setMode(1200, 650, {msaa=4, fullscreen=false, vsync=true})
+love.window.setMode(1200, 650, {msaa=2, fullscreen=false, vsync=true})
 
 paused = false
 
@@ -80,8 +80,8 @@ function love.load()
 	for i = 1, num_dots do
 		-- dots[i] = {x=screenMiddle().x,y=screenMiddle().y,vx=0,vy=0,a=0}
 		dots[i] = {
-			x=screenMiddle().x,
-			y=screenMiddle().y,
+			x=love.math.random(0, love.graphics.getWidth()),
+			y=love.math.random(0, love.graphics.getHeight()),
 			vx=0,
 			vy=0,
 			a=randomAngle(),
@@ -191,11 +191,11 @@ function update(dot, dt)
 			applyFriction(dot, FRICTION_HELD)	
 		else
 			applyFriction(dot, FRICTION_FREE)
-			turnRandom(dot)	
+			dot.vy = dot.vy + 1001 * dt
 		end
 	else
 		applyFriction(dot, FRICTION_FREE)
-		turnRandom(dot)
+		dot.vy = dot.vy + 1001 * dt
 	end
 	dot.x = dot.x + dot.vx * dt
 	dot.y = dot.y + dot.vy * dt

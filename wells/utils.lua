@@ -2,12 +2,19 @@ function cos(x) return math.cos(x) end
 function sin(x) return math.sin(x) end
 function atan2(x, y) return math.atan2(x, y) end
 function rad(a) return math.rad(a) end
+function deg(a) return math.deg(a) end
+function sqrt(a) return math.sqrt(a) end
+function pow(a, b) return math.pow(a, b) end
 function random(a, b)
 	return love.math.random(a, b)
 end
 
+function pyth(a, b)
+	return sqrt(pow(a, 2) + pow(b, 2))
+end
+
 function distance(a, b)
-	return math.sqrt(math.pow(b.x - a.x, 2) + math.pow(b.y - a.y, 2))
+	return pyth(b.x - a.x, b.y - a.y)
 end
 
 function midpoint(a, b)
@@ -15,17 +22,26 @@ function midpoint(a, b)
 end
 
 function cartToPol(dx, dy)
-	return math.pi * 5/2 - math.atan2(dx, dy)
+	return {
+		d = math.pi * 5/2 - math.atan2(dx, dy),
+		m = pyth(dx, dy)
+	}
 end
 
 function angle(a, b)
-	return cartToPolar(b.x - a.x, b.y - a.y)
+	return cartToPol(b.x - a.x, b.y - a.y).d
 end
 
-function polToCart(a, rd)
+function vectorAdd(d1, m1, d2, m2)
+	c1 = polToCart(d1, m1)
+	c2 = polToCart(d2, m2)
+	return cartToPol(c1.x + c2.x, c1.y + c2.y)
+end
+
+function polToCart(a, r)
 	return {
 		x = r * cos(a),
-		y = r * cos(a)
+		y = r * sin(a)
 	}
 end
 
