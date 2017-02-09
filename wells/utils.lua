@@ -5,8 +5,13 @@ function rad(a) return math.rad(a) end
 function deg(a) return math.deg(a) end
 function sqrt(a) return math.sqrt(a) end
 function pow(a, b) return math.pow(a, b) end
+
 function random(a, b)
 	return love.math.random(a, b)
+end
+
+function cap(a, b)
+	if a > b then return b else return a end
 end
 
 function pyth(a, b)
@@ -61,5 +66,8 @@ function HSL(h, s, l, a)
 end
 
 function map(v, l, h, ol, oh)
-	return (v-l)/(h-l)*(oh-ol)+ol
+	if v >= h then return oh 
+	elseif v <= ol then return ol
+	else return (v-l)/(h-l)*(oh-ol)+ol
+	end
 end

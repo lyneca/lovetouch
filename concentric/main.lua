@@ -4,10 +4,10 @@ dots = {}
 
 grid = {}
 
-FRICTION_FREE = 0.99
-FRICTION_HELD = 0.97
+FRICTION_FREE = 0.9
+FRICTION_HELD = 0.96
 MOVE_SPEED = 1
-RANDOM_MOVE_AMOUNT = 40
+RANDOM_MOVE_AMOUNT = 15
 
 RADIUS_PICKUP = 250
 RADIUS_MAX = 200
@@ -20,7 +20,7 @@ INNER_RADIUS_MIN = 100
 
 ORBIT_SPEED = 20
 
-SPEED_LIMIT = 700
+SPEED_LIMIT = 800
 
 GRID_GAP = 20
 
@@ -191,17 +191,18 @@ function update(dot, dt)
 			applyFriction(dot, FRICTION_HELD)	
 		else
 			applyFriction(dot, FRICTION_FREE)
-			dot.vy = dot.vy + 1001 * dt
+			-- dot.vy = dot.vy + 1001 * dt
 		end
 	else
 		applyFriction(dot, FRICTION_FREE)
-		dot.vy = dot.vy + 1001 * dt
+		-- dot.vy = dot.vy + 1001 * dt
 	end
+	turnRandom(dot)
 	dot.x = dot.x + dot.vx * dt
 	dot.y = dot.y + dot.vy * dt
 	bounce(dot)
 	dot.c = map(getVelocity(dot), 0, SPEED_LIMIT, 0, 255)
-	dot.c = (dot.c + 80) % 255
+	dot.c = (dot.c + 120) % 255
 end
 
 function love.update(dt)
