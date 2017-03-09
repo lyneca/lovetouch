@@ -1,3 +1,4 @@
+local utf8 = require('utf8')
 num_dots = 300
 
 dots = {}
@@ -15,7 +16,8 @@ RADIUS_MIN = 180
 
 INNER_RADIUS_PICKUP = 145
 
-INNER_RADIUS_MAX = 120
+INNER_RADIUS_MAX = 120 
+
 INNER_RADIUS_MIN = 100
 
 ORBIT_SPEED = 20
@@ -24,18 +26,51 @@ SPEED_LIMIT = 800
 
 GRID_GAP = 20
 
-love.window.setMode(1200, 650, {msaa=2, fullscreen=false, vsync=true})
+love.window.setMode(1200, 650, {fullscreen=false})
 
 paused = false
 
+draw_command_input = false
+command_input = ""
+
+function love.textinput(t)
+  if draw_command_input then
+    if t ~= ':' then
+      command_input = command_input .. t
+    end
+  end
+  if t == ':' then
+    paused = false
+    command_input = ""
+    draw_command_input = true
+  end
+end
+
 function love.keypressed(key)
-	if key == 'esc' then
-		love.event.quit()
-	elseif key == 'f' then
+	if key == 'escape' then
+    if draw_command_input then
+      command_input = ""
+      draw_command_input = false
+    else
+		  love.event.quit()
+    end
+  elseif key == 'backspace' then
+    local byteoffset = utf8.offset(command_input, -1)
+    if byteoffset then
+      command_input = string.sub(command_input, 1, byteoffset - 1)
+    end
+	elseif key == 'f' and not draw_command_input then
 		love.window.setFullscreen(not love.window.getFullscreen())	
-	elseif key == 'space' then
+	elseif key == 'space' and not draw_command_input then
 		paused = not paused
-	end
+  elseif key == 'return' and draw_command_input then
+    execute(command_input)
+    draw_command_input = false
+  end
+end
+
+function execute(text)
+  loadstring(text)()
 end
 
 function HSL(h, s, l, a)
@@ -51,13 +86,6 @@ function HSL(h, s, l, a)
 	elseif h < 5 then r,g,b = x,0,c
 	else              r,g,b = c,0,x
 	end return (r+m)*255,(g+m)*255,(b+m)*255,a
-end
-
-function cart(pos, angle, length)
-	return {
-		x = pos.x + length * math.cos(angle),
-		y = pos.y + length * math.sin(angle),
-	}
 end
 
 function distance(a, b)
@@ -77,6 +105,7 @@ function randomAngle()
 end
 
 function love.load()
+  love.keyboard.setKeyRepeat(true)
 	for i = 1, num_dots do
 		-- dots[i] = {x=screenMiddle().x,y=screenMiddle().y,vx=0,vy=0,a=0}
 		dots[i] = {
@@ -227,4 +256,8 @@ function love.draw()
 		-- pointIndicator = cart(dot, dot.a, 10)
 		-- love.graphics.line(dot.x, dot.y, pointIndicator.x, pointIndicator.y)
 	end
+  if draw_command_input then
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.print(':' .. command_input)
+  end
 end
